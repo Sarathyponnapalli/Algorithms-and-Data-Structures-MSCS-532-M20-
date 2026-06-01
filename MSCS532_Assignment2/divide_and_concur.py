@@ -202,6 +202,34 @@ if __name__ == "__main__":
     binarysearch_results.append(("Single element, exact", 1, t, m, "Found"))
     print(f"{'Single element, exact':<30} {1:>8} {t:>12.2f} {m:>12} {'Found':>10}")
 
+    # Test Case 6: Random target in small array
+    arr_rand_small = sorted(random.sample(range(1, 1001), 200))
+    target_rs = random.choice(arr_rand_small)
+    _, t, m = measure(binary_search, arr_rand_small, target_rs)
+    binarysearch_results.append(
+        ("Random small (200), hit", 200, t, m, "Found"))
+    print(f"{'Random small (200), hit':<30} {200:>8} {t:>12.2f} {m:>12} {'Found':>10}")
+
+    # Test Case 7: Random target in medium array — guaranteed miss
+    arr_rand_med = sorted(random.sample(
+        range(0, 100000, 2), 50000))  # even numbers only
+    # odd — never present
+    target_rm = random.randrange(1, 100000, 2)
+    _, t, m = measure(binary_search, arr_rand_med, target_rm)
+    binarysearch_results.append(
+        ("Random med (50k), miss", 50000, t, m, "Not Found"))
+    print(f"{'Random med (50k), miss':<30} {50000:>8} {t:>12.2f} {m:>12} {'Not Found':>10}")
+
+    # Test Case 8: Random large array — random target (hit or miss)
+    arr_rand_large = sorted(random.sample(range(1, 2000001), 500000))
+    target_rl = random.randint(1, 2000001)
+    result_rl = binary_search(arr_rand_large, target_rl)
+    _, t, m = measure(binary_search, arr_rand_large, target_rl)
+    label_rl = "Found" if result_rl != -1 else "Not Found"
+    binarysearch_results.append(
+        ("Random large (500k), any", 500000, t, m, label_rl))
+    print(f"{'Random large (500k), any':<30} {500000:>8} {t:>12.2f} {m:>12} {label_rl:>10}")
+
     # ── KARATSUBA MULTIPLICATION TEST CASES ──────────────────────────────
     print("\n── KARATSUBA MULTIPLICATION ───────────────────────────────────────")
     print(f"{'Dataset':<30} {'Digits':>8} {'Time (µs)':>12} {'Memory (B)':>12} {'Correct':>10}")
@@ -246,6 +274,30 @@ if __name__ == "__main__":
     correct = (res == 0)
     kara_results.append(("Large × 0 (edge)", 11, t, m, correct))
     print(f"{'Large × 0 (edge)':<30} {11:>8} {t:>12.2f} {m:>12} {str(correct):>10}")
+
+    # Test Case 6: Random 8-digit × 8-digit
+    x6 = random.randint(10**7, 10**8 - 1)
+    y6 = random.randint(10**7, 10**8 - 1)
+    res, t, m = measure(karatsuba, x6, y6)
+    correct = (res == x6 * y6)
+    kara_results.append(("8-digit × 8-digit (rand)", 8, t, m, correct))
+    print(f"{'8-digit × 8-digit (rand)':<30} {8:>8} {t:>12.2f} {m:>12} {str(correct):>10}")
+
+    # Test Case 7: Random 30-digit × 30-digit
+    x7 = random.randint(10**29, 10**30 - 1)
+    y7 = random.randint(10**29, 10**30 - 1)
+    res, t, m = measure(karatsuba, x7, y7)
+    correct = (res == x7 * y7)
+    kara_results.append(("30-digit × 30-digit (rand)", 30, t, m, correct))
+    print(f"{'30-digit × 30-digit (rand)':<30} {30:>8} {t:>12.2f} {m:>12} {str(correct):>10}")
+
+    # Test Case 8: Random 100-digit × 100-digit — stress test
+    x8 = random.randint(10**99, 10**100 - 1)
+    y8 = random.randint(10**99, 10**100 - 1)
+    res, t, m = measure(karatsuba, x8, y8)
+    correct = (res == x8 * y8)
+    kara_results.append(("100-digit × 100-digit (rand)", 100, t, m, correct))
+    print(f"{'100-digit × 100-digit (rand)':<30} {100:>8} {t:>12.2f} {m:>12} {str(correct):>10}")
 
     print("\n" + "=" * 70)
     print("  ALL TESTS COMPLETE")
