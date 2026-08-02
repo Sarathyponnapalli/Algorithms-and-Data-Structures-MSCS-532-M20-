@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Claude Code local settings (machine-specific, not part of the deliverable)
+.claude/settings.local.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+CLAUDE.md
